@@ -1,28 +1,33 @@
-import { useRef, useState } from "react";
-import Content from "./Content";
+import { useReducer } from "react";
+
+const initState = 0
+
+const UP_ACTION = 'UP'
+const DOWN_ACTION = 'DOWN'
+
+const reducer = (state, action) => {
+    switch (action) {
+      case UP_ACTION:
+        return state + 1
+      case DOWN_ACTION:
+        return state - 1
+      default:
+        throw new Error('not action')
+    }
+}
 
 function App() {
 
-  const [count, setCount] = useState(60);
-  let timerId = useRef()
-
-  const handleStart = () => {
-    timerId.current = setInterval(() => (
-      setCount(prev => prev - 1)
-    ), 1000)
-  }
-
-  const handleStop = () => {
-    clearInterval(timerId.current)
-  }
-
-  const h1Ref = useRef()
-  console.log(h1Ref.current)
+  const [count, dispatch] = useReducer(reducer, initState);
   return (
     <div style={{ padding: 32 }}>
-      <h1 ref={h1Ref}>{count}</h1>
-      <button onClick={handleStart}>Start</button>
-      <button onClick={handleStop}>Stop</button>
+      <h1>{count}</h1>
+      <button
+        onClick={() => dispatch(UP_ACTION)}
+      >UP</button>
+      <button
+        onClick={() => dispatch(DOWN_ACTION)}
+       >DOWN</button>
     </div>
   );
 }
